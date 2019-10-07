@@ -26,8 +26,6 @@ exports.get_Post_with_id = function(req, res){
 exports.create_Post = function(req, res){
     let post = new PostModel();
     const {
-
-        user,
         description,
         photo
     } = req.body;
@@ -53,3 +51,35 @@ exports.create_Post = function(req, res){
             });
     });
 }
+ 
+exports.delete_post_with_id = function(req, res){
+    var queryID = req.param.id;
+
+    PostModel.findPostAndDelete({
+        _ID: queryID
+    }, function (err, obj){
+        if (err) return res.json({
+            success: false,
+            error: err
+        });
+        return res.send(obj);
+    });
+}
+
+exports.update_a_post = function (req, res){
+    var queryID = req.params.id;
+    var body = req.body;
+    UserModel.findOneAndUpdate({
+        _ID: queryID
+    }, body, function (err) {
+        if (err) return res.json({
+            success: false,
+            error: err
+        });
+        return res.json({
+            success: true,
+            post: body
+        });
+    });
+}
+
