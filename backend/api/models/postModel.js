@@ -18,6 +18,7 @@ var UserSchema = new Schema({
     },
     photo: {
         //should be a jpeg 
+        type: String,
         required: "Please select a picture for your post"
     }
 

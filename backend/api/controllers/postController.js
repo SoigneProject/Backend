@@ -1,4 +1,4 @@
-var UserModel = require('../models/postModel');
+var PostModel = require('../models/postModel');
 
 // exports.get_all_posts_by_user = function(req, res){
 //     var queryUsername = req.params.username;
@@ -9,10 +9,10 @@ var UserModel = require('../models/postModel');
 
 // }
 
-exports.get_Post_with_id = function(req, res){
+exports.get_post_with_id = function(req, res){
    // Get a user
     var queryID = req.params.id;
-    postModel.findOne({
+    PostModel.findOne({
         _id: queryID
     }, function (err, obj) {
         if (err) return res.json({
