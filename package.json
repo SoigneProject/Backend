@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "backend/server.js",
-  "scripts": {
-    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && cd client && npm start\""
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
