@@ -13,7 +13,7 @@ exports.get_Post_with_id = function(req, res){
    // Get a user
     var queryID = req.params.id;
     postModel.findOne({
-        username: queryID
+        _id: queryID
     }, function (err, obj) {
         if (err) return res.json({
             success: false,
