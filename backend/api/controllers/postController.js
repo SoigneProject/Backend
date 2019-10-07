@@ -1,4 +1,4 @@
-var PostModel = require('../models/postModel');
+const PostModel = require('../models/postModel');
 
 // exports.get_all_posts_by_user = function(req, res){
 //     var queryUsername = req.params.username;
@@ -12,8 +12,8 @@ var PostModel = require('../models/postModel');
 exports.get_Post_with_id = function(req, res){
    // Get a user
     var queryID = req.params.id;
-    PostModel.findOne({
-        _ID: queryID
+    PostModel.findById({
+        _id: queryID
     }, function (err, obj) {
         if (err) return res.json({
             success: false,
@@ -36,7 +36,9 @@ exports.create_Post = function(req, res){
             error: 'INVALID INPUTS'
         });
 
-        post.dateTime = new Date();
+        var ourDate = new Date();
+        ourDate.setHours(ourDate.getHours() + 7);
+        post.dateTime = ourDate;
         //post.user = we need to find a way to link the user
         post.description = description;
         post.photo = photo;
@@ -53,10 +55,10 @@ exports.create_Post = function(req, res){
 }
  
 exports.delete_post_with_id = function(req, res){
-    var queryID = req.param.id;
+    var queryID = req.params.id;
 
-    PostModel.findPostAndDelete({
-        _ID: queryID
+    PostModel.findOneAndDelete({
+        _id: queryID
     }, function (err, obj){
         if (err) return res.json({
             success: false,
@@ -69,8 +71,8 @@ exports.delete_post_with_id = function(req, res){
 exports.update_a_post = function (req, res){
     var queryID = req.params.id;
     var body = req.body;
-    UserModel.findOneAndUpdate({
-        _ID: queryID
+    PostModel.findOneAndUpdate({
+        _id: queryID
     }, body, function (err) {
         if (err) return res.json({
             success: false,
