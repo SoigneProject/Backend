@@ -5,7 +5,7 @@ var express = require('express'),
   userRoute = require('./api/routes/userRoute'),
   postRouter = require('./api/routes/postRouter'),
   bodyParser = require('body-parser'),
-  cookieParser = require('cookie-parser');
+  cookieParser = require('cookie-parser'),
   itemRouter = require('./api/routes/itemRouter');
 
 const uri = "mongodb+srv://Test:Test123@cs160-cluster-gigd4.mongodb.net/Soigne?retryWrites=true&w=majority";
