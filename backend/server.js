@@ -4,6 +4,7 @@ var express = require('express'),
   port = process.env.PORT || 3000,
   userRoute = require('./api/routes/userRoute'),
   postRouter = require('./api/routes/postRouter'),
+  itemRouter = require('./api/routes/itemRouter');
   bodyParser = require('body-parser');
 
 const uri = "mongodb+srv://Test:Test123@cs160-cluster-gigd4.mongodb.net/Soigne?retryWrites=true&w=majority";
@@ -31,6 +32,7 @@ app.use(bodyParser.json());
 // Register routes
 userRoute(app);
 postRouter(app);
+itemRouter(app);
 
 // Error message for 404
 app.use(function (req, res) {
