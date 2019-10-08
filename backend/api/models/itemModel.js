@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
-​
 var Schema = mongoose.Schema;
-​
+
 var ItemSchema = new Schema({
     serialNumber: {
         type: String
@@ -19,5 +18,4 @@ var ItemSchema = new Schema({
         required: "Please the items catetegory"
     }
 });
-​
-module.exports = mongoose.model('Ttem', UserSchema);
+module.exports = mongoose.model('Item', ItemSchema);
