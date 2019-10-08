@@ -1,5 +1,10 @@
 var UserModel = require('../models/userModel');
 
+exports.set_a_user = function(req, res) {
+    
+    res.cookie("userData", )
+}
+
 // Delete a user
 exports.delete_a_user = function (req, res) {
     var queryUsername = req.params.username;

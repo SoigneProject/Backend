@@ -4,7 +4,8 @@ var express = require('express'),
   port = process.env.PORT || 3000,
   userRoute = require('./api/routes/userRoute'),
   postRouter = require('./api/routes/postRouter'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  cookieParser = require('cookie-parser');
 
 const uri = "mongodb+srv://Test:Test123@cs160-cluster-gigd4.mongodb.net/Soigne?retryWrites=true&w=majority";
 mongoose.connect(uri, {
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+
+app.use(cookieParser());
 
 // Register routes
 userRoute(app);

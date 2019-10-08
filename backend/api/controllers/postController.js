@@ -9,8 +9,8 @@ const PostModel = require('../models/postModel');
 
 // }
 
-exports.get_Post_with_id = function(req, res){
-   // Get a user
+exports.get_Post_with_id = function (req, res) {
+    // Get a user
     var queryID = req.params.id;
     PostModel.findById({
         _id: queryID
@@ -23,43 +23,39 @@ exports.get_Post_with_id = function(req, res){
     });
 }
 
-exports.create_Post = function(req, res){
+exports.create_Post = function (req, res) {
     let post = new PostModel();
     const {
         description,
         photo
     } = req.body;
 
-    if(!description || !photo)
+    if (!description || !photo)
         return res.json({
             created: false,
             error: 'INVALID INPUTS'
         });
 
-        var ourDate = new Date();
-        ourDate.setHours(ourDate.getHours() + 7);
-        post.dateTime = ourDate;
-        //post.user = we need to find a way to link the user
-        post.description = description;
-        post.photo = photo;
+    post.photo = photo;
+    post.description = description;
 
-        post.save((err) => {
-            if (err) return res.json({
-                created: false,
-                error: err
-            });
-            return res.json({
-                created: true
-            });
+    post.save((err) => {
+        if (err) return res.json({
+            created: false,
+            error: err
+        });
+        return res.json({
+            created: true
+        });
     });
 }
- 
-exports.delete_post_with_id = function(req, res){
+
+exports.delete_post_with_id = function (req, res) {
     var queryID = req.params.id;
 
     PostModel.findOneAndDelete({
         _id: queryID
-    }, function (err, obj){
+    }, function (err, obj) {
         if (err) return res.json({
             success: false,
             error: err
@@ -68,7 +64,7 @@ exports.delete_post_with_id = function(req, res){
     });
 }
 
-exports.update_a_post = function (req, res){
+exports.update_a_post = function (req, res) {
     var queryID = req.params.id;
     var body = req.body;
     PostModel.findOneAndUpdate({
@@ -84,4 +80,3 @@ exports.update_a_post = function (req, res){
         });
     });
 }
-
