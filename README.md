@@ -6,7 +6,7 @@
 3. Open terminal (check current directory is root folder **Backend**)
 4. Install packages with:
 ```
-npm i -S mongoose mongodb axios express cors nodemon
+npm i -S mongoose mongodb axios express cors nodemon cookie-parser
 ```
 5. Start the app with:
 ```
@@ -20,5 +20,6 @@ nodemon server.js
 - Cors
 - Express
 - Nodemon
+- Cookie-Parser
 
 ### If you get a bug, copy paste debug output and let me know :)
