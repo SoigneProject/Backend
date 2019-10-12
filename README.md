@@ -6,7 +6,7 @@
 3. Open terminal (check current directory is root folder **Backend**)
 4. Install packages with:
 ```
-npm i -S mongoose mongodb axios express cors cookie-parser
+npm i -S mongoose mongodb axios express cors bcrypt
 ```
 ```
 npm i -g nodemon
