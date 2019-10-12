@@ -22,7 +22,7 @@ nodemon server.js
 - Axios
 - Cors
 - Express
-- Nodemon
-- Cookie-Parser
+- Bcrypt
+- Nodemon (Global)
 
 ### If you get a bug, copy paste debug output and let me know :)

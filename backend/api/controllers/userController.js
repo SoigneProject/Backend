@@ -1,10 +1,4 @@
 var UserModel = require('../models/userModel');
-
-exports.set_a_user = function(req, res) {
-    
-    res.cookie("userData", )
-}
-
 // Delete a user
 exports.delete_a_user = function (req, res) {
     var queryUsername = req.params.username;
@@ -35,7 +29,7 @@ exports.update_a_user = function (req, res) {
             user: body
         });
     });
-}
+};
 
 // Get all users
 exports.get_all_users = function (req, res) {
@@ -74,39 +68,73 @@ exports.create_a_user = function (req, res) {
         username,
         firstName,
         lastName,
-        emailAddress,
         password
     } = req.body;
 
-    UserModel.count({
+    let {
+        emailAddress
+    } = req.body;
+
+    // Start
+    if (!username || !firstName || !lastName || !emailAddress || !password) {
+        return res.json({
+            created: false,
+            error: 'INVALID INPUTS'
+        });
+    }
+
+    UserModel.countDocuments({
         username: username
     }, function (err, count) {
-        if (count > 0) return res.json({
-            created: false,
-            error: "User Exists"
-        });
-
-        // Start
-        if (!username || !firstName || !lastName || !emailAddress || !password) {
-            return res.json({
-                created: false,
-                error: 'INVALID INPUTS'
+        if (err) {
+            return res.send({
+                success: false,
+                message: 'Error: Server error'
+            });
+        } else if (count > 0) {
+            return res.send({
+                success: false,
+                message: 'Error: Account already exists with that username.'
             });
         }
 
-        user.username = username;
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.emailAddress = emailAddress;
-        user.password = password;
 
-        user.save((err) => {
-            if (err) return res.json({
-                created: false,
-                error: err
-            });
-            return res.json({
-                created: true
+        emailAddress = emailAddress.toLowerCase();
+        emailAddress = emailAddress.trim();
+        // Steps:
+        // 1. Verify email doesn't exist
+        // 2. Save
+        UserModel.countDocuments({
+            emailAddress: emailAddress
+        }, (err, previousUsers) => {
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Server error'
+                });
+            } else if (previousUsers > 0) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Account already exists with that email.'
+                });
+            }
+            // Save the new user
+            user.emailAddress = emailAddress;
+            user.password = user.generateHash(password);
+            user.username = username;
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.save((err, user) => {
+                if (err) {
+                    return res.send({
+                        success: false,
+                        message: 'Error: Server error'
+                    });
+                }
+                return res.send({
+                    success: true,
+                    message: 'Signed up'
+                });
             });
         });
     });

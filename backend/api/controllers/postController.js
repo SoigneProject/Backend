@@ -50,6 +50,7 @@ exports.get_all_post_with_name = function (req, res){
 }
 
 
+
 exports.create_Post = function(req, res){
     let post = new PostModel();
     const {
@@ -67,10 +68,12 @@ exports.create_Post = function(req, res){
         var ourDate = new Date();
         ourDate.setHours(ourDate.getHours() + 7);
         post.dateTime = ourDate;
-        //post.user = we need to find a way to link the user
         post.title = title;
         post.description = description;
         post.photo = photo;
+        // we need to find a way to link the user
+        // Get the current user from cookies
+        post.username = username;
 
     post.save((err) => {
         if (err) return res.json({
