@@ -2,7 +2,10 @@
   "name": "fullstack_app",
   "version": "1.0.0",
   "description": "",
-  "main": "backend/server.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend/client && npm start\""
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
