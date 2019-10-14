@@ -39,15 +39,29 @@ exports.get_all_item_with_name = function (req, res){
     });
 }
 
+exports.get_All_Items_By_Retailer = function(req, res){
+    var retailerQuery = req.params.retailerID;
+    ItemModel.find({
+        name: retailerQuery
+    }, function (err, obj) {
+        if (err) return res.json({
+            success: false,
+            error: err
+        });
+        return res.send(obj);
+    });
+}
+
 exports.create_item = function(req, res){
     let item = new ItemModel();
     const {
         name,
         url,
-        clothingCategory
+        clothingCategory,
+        retailerID
     } = req.body;
 
-    if(!name || !url || !clothingCategory)
+    if(!name || !url || !clothingCategory || !retailerID)
         return res.json({
             created: false,
             error: 'INVALID INPUTS'
@@ -56,6 +70,7 @@ exports.create_item = function(req, res){
     item.name = name;
     item.url = url;
     item.clothingCategory = clothingCategory;
+    item.retailerID = retailerID;
     
     item.save((err) => {
         if (err) return res.json({

@@ -16,6 +16,10 @@ var ItemSchema = new Schema({
     clothingCategory: {
         type: String,
         required: "Please the items catetegory"
+    },
+    retailerID:{
+        type: String
     }
+
 });
 module.exports = mongoose.model('Item', ItemSchema);
