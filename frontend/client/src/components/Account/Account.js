@@ -203,6 +203,7 @@ class Account extends Component {
         // Verify token
         axios.get('http://localhost:3000/users/logout?token=' + token).then(json => {
             if (json.data.success) {
+              localStorage.removeItem('soigne');
                 this.setState({
                     token: '',
                     isLoading: false
