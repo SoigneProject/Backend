@@ -73,7 +73,6 @@ exports.create_Post = function(req, res){
         post.photo = photo;
         // we need to find a way to link the user
         // Get the current user from cookies
-        post.username = username;
 
     post.save((err) => {
         if (err) return res.json({

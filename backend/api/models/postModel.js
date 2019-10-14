@@ -14,7 +14,7 @@ var PostSchema = new Schema({
     description: {
         type: String
     },
-    user: { //change this to a user // user
+    username: { //change this to a user // user
         type: String
     },
     photo: {
