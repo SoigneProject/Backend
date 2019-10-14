@@ -1,7 +1,8 @@
-var mongoose = require('mongoose');
 var express = require('express'),
+  mongoose = require('mongoose'),
+  cors = require('cors'),
   app = express(),
-  port = process.env.PORT || 3000,
+  port = 3000,
   userRoute = require('./api/routes/userRoute'),
   postRouter = require('./api/routes/postRouter'),
   bodyParser = require('body-parser'),
@@ -17,6 +18,9 @@ mongoose.connect(uri, {
 let db = mongoose.connection;
 // checks if connection with the database is successful
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// Use CORS
+app.use(cors());
 
 // (optional) only made for logging and
 // bodyParser, parses the request body to be a readable json format
