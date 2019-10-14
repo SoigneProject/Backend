@@ -6,11 +6,12 @@ var express = require('express'),
   userRoute = require('./api/routes/userRoute'),
   postRoute = require('./api/routes/postRoute'),
   bodyParser = require('body-parser'),
-  itemRoute = require('./api/routes/itemRoute');
+  itemRoute = require('./api/routes/itemRoute'),
   retailerRoute = require('./api/routes/retailerRoute');
 
 const uri = "mongodb+srv://Test:Test123@cs160-cluster-gigd4.mongodb.net/Soigne?retryWrites=true&w=majority";
 mongoose.connect(uri, {
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

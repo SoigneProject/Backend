@@ -17,7 +17,7 @@ class Account extends Component {
       token: '',
       signUpError: '',
       signInError: '',
-      signInEmail: '',
+      signInUsername: '',
       signInPassword: '',
       signUpEmail: '',
       signUpPassword: '',
@@ -27,7 +27,7 @@ class Account extends Component {
     };
 
     // Sign In
-    this.onTextboxChangeSignInEmail = this.onTextboxChangeSignInEmail.bind(this);
+    this.onTextboxChangeSignInUsername = this.onTextboxChangeSignInUsername.bind(this);
     this.onTextboxChangeSignInPassword = this.onTextboxChangeSignInPassword.bind(this);
     // Sign Up
     this.onTextboxChangeSignUpEmail = this.onTextboxChangeSignUpEmail.bind(this);
@@ -42,24 +42,18 @@ class Account extends Component {
   }
 
   componentDidMount() {
-    console.log("Mounting");
     const obj = getFromStorage('soigne');
     if (obj && obj.token) {
-      const {
-        token
-      } = obj;
+      const token = obj.token;
       // Verify token
-      fetch('/api/account/verify?token=' + token)
-        .then(res => res.json())
+      axios.get('http://localhost:3000/users/verify?token=' + token)
         .then(json => {
-          if (json.success) {
-            console.log("Verify Success");
+          if (json.data.success) {
             this.setState({
               token,
               isLoading: false
             });
           } else {
-            console.log("Verify Failed");
             this.setState({
               isLoading: false,
             });
@@ -74,9 +68,9 @@ class Account extends Component {
 
   // =============================== Sign In ===============================
 
-  onTextboxChangeSignInEmail(event) {
+  onTextboxChangeSignInUsername(event) {
     this.setState({
-      signInEmail: event.target.value,
+      signInUsername: event.target.value,
     });
   }
 
@@ -124,7 +118,6 @@ class Account extends Component {
   }
 
   onSignUp() {
-    console.log("Signing Up");
     // Grab state
     const {
       signUpEmail,
@@ -147,16 +140,16 @@ class Account extends Component {
       password: signUpPassword,
     }).then(json => {
         console.log('json', json);
-        if (json.success) {
+        if (json.data.success) {
           this.setState({
-            signUpError: json.message,
+            signUpError: json.data.message,
             isLoading: false,
             signUpEmail: '',
             signUpPassword: '',
           });
         } else {
           this.setState({
-            signUpError: json.message,
+            signUpError: json.data.message,
             isLoading: false,
           });
         }
@@ -166,7 +159,7 @@ class Account extends Component {
   onSignIn() {
     // Grab state
     const {
-      signInEmail,
+      signInUsername,
       signInPassword,
     } = this.state;
 
@@ -175,32 +168,25 @@ class Account extends Component {
     });
 
     // Post request to backend
-    fetch('/users/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: signInEmail,
-          password: signInPassword,
-        }),
-      }).then(res => res.json())
-      .then(json => {
+    axios.post('http://localhost:3000/users/signin', {
+      username: signInUsername,
+      password: signInPassword
+    }).then(json => {
         console.log('json', json);
-        if (json.success) {
+        if (json.data.success) {
           setInStorage('soigne', {
-            token: json.token
+            token: json.data.token
           });
           this.setState({
-            signInError: json.message,
+            signInError: json.data.message,
             isLoading: false,
             signInPassword: '',
-            signInEmail: '',
-            token: json.token,
+            signInUsername: '',
+            token: json.data.token,
           });
         } else {
           this.setState({
-            signInError: json.message,
+            signInError: json.data.message,
             isLoading: false,
           });
         }
@@ -209,32 +195,28 @@ class Account extends Component {
 
   logout() {
     this.setState({
-      isLoading: true,
+        isLoading: true,
     });
     const obj = getFromStorage('soigne');
     if (obj && obj.token) {
-      const {
-        token
-      } = obj;
-      // Verify token
-      fetch('/api/account/logout?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.setState({
-              token: '',
-              isLoading: false
-            });
-          } else {
-            this.setState({
-              isLoading: false,
-            });
-          }
+        const token = obj.token;
+        // Verify token
+        axios.get('http://localhost:3000/users/logout?token=' + token).then(json => {
+            if (json.data.success) {
+                this.setState({
+                    token: '',
+                    isLoading: false
+                });
+            } else {
+                this.setState({
+                    isLoading: false,
+                });
+            }
         });
     } else {
-      this.setState({
-        isLoading: false,
-      });
+        this.setState({
+            isLoading: false,
+        });
     }
   }
 
@@ -243,7 +225,7 @@ class Account extends Component {
       isLoading,
       token,
       signInError,
-      signInEmail,
+      signInUsername,
       signInPassword,
       signUpFirstName,
       signUpLastName,
@@ -265,13 +247,13 @@ class Account extends Component {
             } </p>
           ) : (null)
         } <p> Sign In </p> <
-        input type = "email"
-        placeholder = "Email"
+        input type = "text"
+        placeholder = "Username"
         value = {
-          signInEmail
+          signInUsername
         }
         onChange = {
-          this.onTextboxChangeSignInEmail
+          this.onTextboxChangeSignInUsername
         }
         /> <br />
         <input type = "password"
