@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 
+const FollowerSchema = new Schema({username: String});
+const FollowingSchema = new Schema({username: String});
+
 const UserSchema = new Schema({
     firstName: {
         type: String,
@@ -23,7 +26,9 @@ const UserSchema = new Schema({
     password: {
         type: String,
         default: ''
-    }
+    },
+    followers: [FollowerSchema],
+    following: [FollowingSchema]
 });
 
 UserSchema.methods.generateHash = function (password) {

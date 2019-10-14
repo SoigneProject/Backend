@@ -32,6 +32,82 @@ exports.update_a_user = function (req, res) {
     });
 };
 
+exports.add_Follower = function(req,res){
+    var queryUsername = req.params.username;
+    var body = req.body;
+    var follower = body.user;
+    var followerObj = {"username" : follower};
+    UserModel.findOneAndUpdate({
+        username: queryUsername}, 
+        {$push: {followers: followerObj}},function (err) {
+            if (err) return res.json({
+                success: false,
+                error: err
+            });
+            return res.json({
+                success: true,
+                user: body
+            });
+        });
+}
+
+exports.remove_Follower = function(req,res){
+    var queryUsername = req.params.username;
+    var body = req.body;
+    var follower = body.user;
+    var followerObj = {"username" : follower};
+    UserModel.findOneAndUpdate({
+        username: queryUsername}, 
+        {$pull: {followers: followerObj}},function (err) {
+            if (err) return res.json({
+                success: false,
+                error: err
+            });
+            return res.json({
+                success: true,
+                user: body
+            });
+        });
+}
+
+exports.follow_Someone = function(req, res){
+    var queryUsername = req.params.username;
+    var body = req.body;
+    var userToFollow = body.user;
+    var userToFollowObj = {"username" : userToFollow};
+    UserModel.findOneAndUpdate({
+        username: queryUsername}, 
+        {$push: {following: userToFollowObj}},function (err) {
+            if (err) return res.json({
+                success: false,
+                error: err
+            });
+            return res.json({
+                success: true,
+                user: body
+            });
+        });
+}
+
+exports.unfollow_Someone = function(req, res){
+    var queryUsername = req.params.username;
+    var body = req.body;
+    var userToFollow = body.user;
+    var userToFollowObj = {"username" : userToFollow};
+    UserModel.findOneAndUpdate({
+        username: queryUsername}, 
+        {$pull: {following: userToFollowObj}},function (err) {
+            if (err) return res.json({
+                success: false,
+                error: err
+            });
+            return res.json({
+                success: true,
+                user: body
+            });
+        });
+}
+
 // Get all users
 exports.get_all_users = function (req, res) {
     // this api will get a user based on their username
