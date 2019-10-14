@@ -17,7 +17,7 @@ var ItemSchema = new Schema({
         type: String,
         required: "Please the items catetegory"
     },
-    retailerID:{
+    retailerID: {
         type: String
     }
 

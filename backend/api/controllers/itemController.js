@@ -42,7 +42,7 @@ exports.get_all_item_with_name = function (req, res){
 exports.get_All_Items_By_Retailer = function(req, res){
     var retailerQuery = req.params.retailerID;
     ItemModel.find({
-        name: retailerQuery
+        retailerID: retailerQuery
     }, function (err, obj) {
         if (err) return res.json({
             success: false,
