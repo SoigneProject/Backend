@@ -1,4 +1,5 @@
 var UserModel = require('../models/userModel');
+var UserSessionModel = require('../models/userSessionModel');
 // Delete a user
 exports.delete_a_user = function (req, res) {
     var queryUsername = req.params.username;
@@ -133,9 +134,134 @@ exports.create_a_user = function (req, res) {
                 }
                 return res.send({
                     success: true,
+                    username: user,
                     message: 'Signed up'
                 });
             });
         });
+    });
+};
+
+// Sign In
+exports.sign_in = function (req, res) {
+    const {
+        password
+    } = req.body;
+    let {
+        username
+    } = req.body;
+    if (!username) {
+        return res.send({
+            success: false,
+            message: 'Error: Username cannot be blank.'
+        });
+    }
+    if (!password) {
+        return res.send({
+            success: false,
+            message: 'Error: Password cannot be blank.'
+        });
+    }
+    username = username.toLowerCase();
+    username = username.trim();
+    UserModel.find({
+        username: username
+    }, (err, users) => {
+        if (err) {
+            return res.send({
+                success: false,
+                message: 'Error: server error'
+            });
+        }
+        if (users.length != 1) {
+            return res.send({
+                success: false,
+                message: 'Error: Invalid'
+            });
+        }
+        const user = users[0];
+        if (!user.validPassword(password)) {
+            return res.send({
+                success: false,
+                message: 'Error: Invalid'
+            });
+        }
+        // Otherwise correct user
+        const userSession = new UserSessionModel();
+        userSession.userId = user._id;
+        userSession.save((err, doc) => {
+            if (err) {
+                console.log(err);
+                return res.send({
+                    success: false,
+                    message: 'Error: server error'
+                });
+            }
+            return res.send({
+                success: true,
+                message: 'Valid sign in',
+                token: doc._id
+            });
+        });
+    });
+};
+
+// Log Out
+exports.logout = function (req, res) {
+    // Get the token
+    const token  = req.query.token;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSessionModel.findOneAndUpdate({
+      _id: token,
+      isDeleted: false
+    }, {
+      $set: {
+        isDeleted:true
+      }
+    }, null, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Logged out'
+      });
+    });
+};
+
+// Verify User
+exports.verify_a_user = function (req, res) {
+    // Get the token
+    const token = req.query.token;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSessionModel.find({
+      _id: token,
+      isDeleted: false
+    }, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      if (sessions.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Error: Invalid'
+        });
+      } else {
+        // DO ACTION
+        return res.send({
+          success: true,
+          message: 'Good'
+        });
+      }
     });
 };

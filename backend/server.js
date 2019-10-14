@@ -7,10 +7,11 @@ var express = require('express'),
   postRouter = require('./api/routes/postRouter'),
   bodyParser = require('body-parser'),
   itemRouter = require('./api/routes/itemRouter');
-  retailerRouter = require('./api/routes/retailerRouter');
+  //retailerRouter = require('./api/routes/retailerRouter');
 
 const uri = "mongodb+srv://Test:Test123@cs160-cluster-gigd4.mongodb.net/Soigne?retryWrites=true&w=majority";
 mongoose.connect(uri, {
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -38,7 +39,7 @@ app.use(bodyParser.json());
 userRoute(app);
 postRouter(app);
 itemRouter(app);
-retailerRouter(app);
+// retailerRouter(app);
 
 // Error message for 404
 app.use(function (req, res) {
